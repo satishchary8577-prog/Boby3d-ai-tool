@@ -2,15 +2,14 @@ import os
 import tempfile
 import streamlit as st
 import replicate
-import trimesh
 from PIL import Image
 
 st.set_page_config(page_title="2D to 3D AI Tool", layout="wide")
 
 st.title("Image to 3D STL Converter")
-st.write("2D ఫోటో అప్‌లోడ్ చేయండి - నేరుగా Rhino & ZBrush కోసం STL ఫైల్ పొందండి.")
+st.write("2D ఫోటో అప్‌లోడ్ చేయండి - నేరుగా 3D ఫైల్ పొందండి.")
 
-# Sidebar Token Setup
+# Sidebar Setup
 st.sidebar.header("సెటప్ (Setup)")
 api_token = st.sidebar.text_input("మీ Replicate API Token ఎంటర్ చేయండి:", type="password")
 
@@ -32,18 +31,18 @@ if uploaded_file is not None:
             try:
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
                     image.save(temp_file.name)
-                    temp_file_path = temp_file.name
+                    temp_path = temp_file.name
 
-                with open(temp_file_path, "rb") as file_data:
+                with open(temp_path, "rb") as img_file:
+                    # Direct official Image-to-3D without text prompt
                     output = replicate.run(
-                        "camenduru/triposr:04523e1e2cfc0b90e96030ea45cc6b9d62d2948eb94541dd47bb5f15c7e1136b",
-                        input={"image_path": file_data}
+                        "vaibhavs10/triposr:d64be933221a8d0526017b2b62d8ff5d70f07297e68fa707ea99dbbb24f2b904",
+                        input={"image_path": img_file}
                     )
 
                 if output:
                     st.success("🎉 3D మోడల్ విజయవంతంగా తయారైంది!")
-                    # Check for 3D model link or mesh conversion
                     model_url = output if isinstance(output, str) else str(output)
-                    st.markdown(f"### [ఇక్కడ క్లిక్ చేసి 3D ఫైల్ డౌన్‌లోడ్ చేసుకోండి]({model_url})")
+                    st.markdown(f"### [👉 ఇక్కడ క్లిక్ చేసి మీ 3D ఫైల్ డౌన్‌లోడ్ చేసుకోండి]({model_url})")
             except Exception as e:
                 st.error(f"❌ ఎర్రర్ వచ్చింది: {e}")
