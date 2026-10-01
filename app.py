@@ -34,7 +34,6 @@ if uploaded_file is not None:
                     temp_path = temp_file.name
 
                 with open(temp_path, "rb") as img_file:
-                    # Direct official Image-to-3D without text prompt
                     output = replicate.run(
                         "vaibhavs10/triposr:d64be933221a8d0526017b2b62d8ff5d70f07297e68fa707ea99dbbb24f2b904",
                         input={"image_path": img_file}
