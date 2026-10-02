@@ -1,6 +1,3 @@
-
 streamlit
-replicate
-trimesh
 pillow
-
+gradio_client
